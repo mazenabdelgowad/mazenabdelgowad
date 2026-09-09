@@ -41,12 +41,54 @@ section.projects {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
 }
 
+.project-image-modal {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+  top: 0;
+  right: 0;
+  z-index: 5;
+
+  /* start hidden */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+
+  &.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &>img {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%) scale(0.92);
+    max-width: 90%;
+    max-height: 90%;
+    display: block;
+    object-fit: fill;
+    transition: transform 0.25s ease;
+  }
+
+  &.is-open>img {
+    transform: translate(50%, -50%) scale(1);
+    cursor: zoom-out;
+  }
+
+}
+
 .projects-media-img {
   max-width: 100%;
   max-height: 100%;
   object-fit: fill;
   display: block;
   transition: opacity 320ms ease, transform 320ms ease;
+}
+
+.projects-media-img:hover {
+  cursor: zoom-in;
 }
 
 .projects-media-fallback {
@@ -153,7 +195,7 @@ section.projects {
 
 @media (max-width: 1024px) {
   .projects-body {
-    grid-template-columns: 1fr 360px; 
+    grid-template-columns: 1fr 360px;
   }
 }
 
