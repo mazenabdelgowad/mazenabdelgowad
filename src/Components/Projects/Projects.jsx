@@ -7,6 +7,7 @@ const Projects = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef(null);
   const touchStartX = useRef(null);
+  const projectImageModalRef = useRef(null);
 
   useEffect(() => {
     // Ensure activeIndex is within bounds if projects change
@@ -60,6 +61,33 @@ const Projects = () => {
 
   const counter = (n) => String(n + 1).padStart(2, "0");
 
+  const expandProjectImage = () => {
+    const modal = projectImageModalRef.current;
+    if (!modal) return;
+
+    modal.style.display = "flex";
+    void modal.offsetWidth;
+
+    requestAnimationFrame(() => {
+      modal.classList.add("is-open");
+    });
+  };
+
+  const closeProjectImage = () => {
+    const modal = projectImageModalRef.current;
+    if (!modal) return;
+
+    modal.classList.remove("is-open");
+
+    const handleTransitionEnd = (e) => {
+      if (e.target !== modal) return;
+      modal.style.display = "none";
+      modal.removeEventListener("transitionend", handleTransitionEnd);
+    };
+
+    modal.addEventListener("transitionend", handleTransitionEnd);
+  };
+
   return (
     <section
       className="projects"
@@ -71,6 +99,20 @@ const Projects = () => {
       onTouchEnd={onTouchEnd}
       aria-label="Projects"
     >
+      <div
+        className="project-image-modal"
+        ref={projectImageModalRef}
+        onClick={() => {
+          closeProjectImage();
+        }}
+      >
+        <img
+          src={active.media.src}
+          alt={active.media.alt || active.title}
+          className={`projects-media-img`}
+        />
+      </div>
+
       <div className="projects-inner">
         <div className="projects-header-row">
           <span className="header-title-eyebrow">Projects</span>
@@ -87,6 +129,7 @@ const Projects = () => {
                 alt={active.media.alt || active.title}
                 loading="lazy"
                 className="projects-media-img"
+                onClick={() => expandProjectImage()}
               />
             ) : (
               <div className="projects-media-fallback" aria-hidden>
